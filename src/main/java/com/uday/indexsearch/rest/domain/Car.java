@@ -11,7 +11,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.util.Date;
 import java.util.List;
 
-@Document(indexName = "carIndex", type = "car")
+@Document(indexName = "car-index", type = "car")
 public class Car {
     private String brand;
     private String color;
@@ -40,7 +40,12 @@ public class Car {
     public Car() {
 
     }
-
+    public Car(String brand, String color, String type) {
+        super();
+        this.brand = brand;
+        this.color = color;
+        this.type = type;
+    }
     public String getBrand() {
         return brand;
     }
