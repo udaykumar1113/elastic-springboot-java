@@ -22,7 +22,7 @@ public class RandomCarService implements CarService{
 
         car.setAvailable(random.nextBoolean());
         car.setPrice(5000 + random.nextInt(7001));
-        car.setFirstReleaseDate(RandomDateUtil.generateRandomDate());
+        car.setFirstReleaseOfModel(RandomDateUtil.generateRandomDate());
 
         int randomCount = random.nextInt(ADDITIONAL_FEATURES.size());
         List additionalFeatures = new ArrayList<String>();

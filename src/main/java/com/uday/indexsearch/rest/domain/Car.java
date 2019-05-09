@@ -24,7 +24,7 @@ public class Car {
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ", timezone = "America/New_York")
     @Field(type = FieldType.Date, format = DateFormat.date_time)
-    private Date firstReleaseDate;
+    private Date firstReleaseOfModel;
 
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     private List<String> additionalFeatures;
@@ -46,6 +46,15 @@ public class Car {
         this.color = color;
         this.type = type;
     }
+
+    public Date getFirstReleaseOfModel() {
+        return firstReleaseOfModel;
+    }
+
+    public void setFirstReleaseOfModel(Date firstReleaseOfModel) {
+        this.firstReleaseOfModel = firstReleaseOfModel;
+    }
+
     public String getBrand() {
         return brand;
     }
@@ -94,14 +103,6 @@ public class Car {
         this.id = id;
     }
 
-    public Date getFirstReleaseDate() {
-        return firstReleaseDate;
-    }
-
-    public void setFirstReleaseDate(Date firstReleaseDate) {
-        this.firstReleaseDate = firstReleaseDate;
-    }
-
     public List<String> getAdditionalFeatures() {
         return additionalFeatures;
     }
@@ -143,7 +144,7 @@ public class Car {
                 ", price=" + price +
                 ", available=" + available +
                 ", id='" + id + '\'' +
-                ", firstReleaseDate=" + firstReleaseDate +
+                ", firstReleaseDate=" + firstReleaseOfModel +
                 ", additionalFeatures=" + additionalFeatures +
                 ", engine=" + engine +
                 ", compatibleTires=" + compatibleTires +

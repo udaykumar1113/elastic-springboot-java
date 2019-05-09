@@ -23,6 +23,7 @@ public class ElasticDataSource {
 
     @EventListener(org.springframework.boot.context.event.ApplicationReadyEvent.class)
     public void populateData(){
+        System.out.println("This is executed");
         ResponseEntity response=
                 restTemplate.exchange("http://localhost:9200/car-index", HttpMethod.DELETE,null,String.class);
         System.out.println("Delete response: "+response.getBody());
