@@ -40,4 +40,16 @@ public class CarRestController {
     public List<Car> findCarsByParam(@RequestParam String brand, @RequestParam String color){
         return carElasticRepository.findByBrandAndColor(brand, color);
     }
+
+    @GetMapping(path = "/carscolor")
+    public List<Car> findCarbyTypeBrand(@RequestParam String color, @RequestParam String brand){
+        System.out.println("Inside request method "+color+" "+brand);
+        return carElasticRepository.findByColor(color);
+    }
+
+    @GetMapping(path = "/carscolorbrand")
+    public List<Car> findCarbyTypeBrandColor(@RequestParam String color, @RequestParam String brand){
+        System.out.println("Inside request method "+color+" "+brand);
+        return carElasticRepository.findByColorAndBrand(color,brand);
+    }
 }
