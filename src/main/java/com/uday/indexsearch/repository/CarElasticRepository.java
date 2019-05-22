@@ -1,6 +1,8 @@
 package com.uday.indexsearch.repository;
 
 import com.uday.indexsearch.rest.domain.Car;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.annotations.Query;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Repository;
@@ -45,4 +47,6 @@ public interface CarElasticRepository extends ElasticsearchRepository<Car,String
             "    }\n" +
             "  }")
     public List<Car> findByColorAndBrand(String color, String brand);
+
+    public Page<Car> findByType(String type, Pageable pageable);
 }

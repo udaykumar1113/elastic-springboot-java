@@ -3,6 +3,9 @@ package com.uday.indexsearch.rest.controller;
 import com.uday.indexsearch.repository.CarElasticRepository;
 import com.uday.indexsearch.rest.domain.Car;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,5 +54,13 @@ public class CarRestController {
     public List<Car> findCarbyTypeBrandColor(@RequestParam String color, @RequestParam String brand){
         System.out.println("Inside request method "+color+" "+brand);
         return carElasticRepository.findByColorAndBrand(color,brand);
+    }
+
+    @GetMapping(path = "/carspage")
+    public List<Car> findCarByType(@RequestParam String type,
+                                   @RequestParam(defaultValue = "0") int start,
+                                   @RequestParam(defaultValue = "3") int size){
+        Pageable pageable= PageRequest.of(start,size, Sort.by(Sort.Direction.DESC,"price"));
+        return carElasticRepository.findByType(type,pageable).getContent();
     }
 }
