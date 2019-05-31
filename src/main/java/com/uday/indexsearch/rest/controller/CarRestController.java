@@ -2,11 +2,16 @@ package com.uday.indexsearch.rest.controller;
 
 import com.uday.indexsearch.repository.CarElasticRepository;
 import com.uday.indexsearch.rest.domain.Car;
+import com.uday.indexsearch.rest.domain.ErrorResponse;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,8 +40,16 @@ public class CarRestController {
     }
 
     @GetMapping(path = "/cars/{brand}/{color}")
-    public List<Car> findCarbyColorBrand(@PathVariable String brand, @PathVariable String color){
-        return carElasticRepository.findByBrandAndColor(brand,color);
+    public ResponseEntity<Object> findCarbyColorBrand(@PathVariable String brand, @PathVariable String color){
+        HttpHeaders headers=new HttpHeaders();
+        if(StringUtils.isNumeric(color)){
+            ErrorResponse errorResponse=new ErrorResponse("Invalid color", System.currentTimeMillis());
+            headers.set("Error","Color is passed as numeric");
+            return new ResponseEntity<>(errorResponse, headers,HttpStatus.BAD_REQUEST);
+        }
+        headers.set("Success","Request executed successfully");
+        List<Car> car= carElasticRepository.findByBrandAndColor(brand,color);
+        return ResponseEntity.ok().headers(headers).body(car);
     }
 
     @GetMapping(path = "/cars")
