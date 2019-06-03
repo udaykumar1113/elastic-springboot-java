@@ -1,5 +1,6 @@
 package com.uday.indexsearch.rest.controller;
 
+import com.uday.indexsearch.exception.IllegalApiParamException;
 import com.uday.indexsearch.repository.CarElasticRepository;
 import com.uday.indexsearch.rest.domain.Car;
 import com.uday.indexsearch.rest.domain.ErrorResponse;
@@ -50,9 +51,21 @@ public class CarRestController {
         if(StringUtils.isNumeric(brand)){
                 throw new IllegalAccessException("Invalid brand: "+brand);
         }
+
+        if(StringUtils.isNumeric(color)){
+            throw new IllegalApiParamException("Invalid brand: "+brand);
+        }
+
         headers.set("Success","Request executed successfully");
         List<Car> car= carElasticRepository.findByBrandAndColor(brand,color);
         return ResponseEntity.ok().headers(headers).body(car);
+    }
+
+    @ExceptionHandler(IllegalApiParamException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalApiParamException(IllegalApiParamException e) {
+        String errorMessage = "Exception IllegalApiParamException : " + e.getMessage();
+        ErrorResponse errorResponse = new ErrorResponse(errorMessage, System.currentTimeMillis());
+        return new ResponseEntity<>(errorResponse, null, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
@@ -61,6 +74,7 @@ public class CarRestController {
 
         return new ResponseEntity<>(errorResponse,null, HttpStatus.BAD_REQUEST);
     }
+
     @GetMapping(path = "/cars")
     public List<Car> findCarsByParam(@RequestParam String brand, @RequestParam String color){
         return carElasticRepository.findByBrandAndColor(brand, color);
