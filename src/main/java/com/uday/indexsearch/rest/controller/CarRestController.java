@@ -40,18 +40,27 @@ public class CarRestController {
     }
 
     @GetMapping(path = "/cars/{brand}/{color}")
-    public ResponseEntity<Object> findCarbyColorBrand(@PathVariable String brand, @PathVariable String color){
+    public ResponseEntity<Object> findCarbyColorBrand(@PathVariable String brand, @PathVariable String color) throws IllegalAccessException {
         HttpHeaders headers=new HttpHeaders();
         if(StringUtils.isNumeric(color)){
             ErrorResponse errorResponse=new ErrorResponse("Invalid color", System.currentTimeMillis());
             headers.set("Error","Color is passed as numeric");
             return new ResponseEntity<>(errorResponse, headers,HttpStatus.BAD_REQUEST);
         }
+        if(StringUtils.isNumeric(brand)){
+                throw new IllegalAccessException("Invalid brand: "+brand);
+        }
         headers.set("Success","Request executed successfully");
         List<Car> car= carElasticRepository.findByBrandAndColor(brand,color);
         return ResponseEntity.ok().headers(headers).body(car);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> exceptionHandler(IllegalArgumentException e){
+        ErrorResponse errorResponse=new ErrorResponse("Invalid brand as argument", System.currentTimeMillis());
+
+        return new ResponseEntity<>(errorResponse,null, HttpStatus.BAD_REQUEST);
+    }
     @GetMapping(path = "/cars")
     public List<Car> findCarsByParam(@RequestParam String brand, @RequestParam String color){
         return carElasticRepository.findByBrandAndColor(brand, color);
